@@ -1,0 +1,24 @@
+Service
+=======
+
+$ ifconfig eth0
+
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.3  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::a00:27ff:feaf:46ac  prefixlen 64  scopeid 0x20<link>
+        inet6 2003:e4:a718:1558:a174:c7d2:16b:7157  prefixlen 64  scopeid 0x0<global>
+        inet6 2003:e4:a718:1558:a00:27ff:feaf:46ac  prefixlen 64  scopeid 0x0<global>
+        ether 08:00:27:af:46:ac  txqueuelen 1000  (Ethernet)
+        RX packets 9743  bytes 13779227 (13.1 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 4236  bytes 327829 (320.1 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+$ route -n
+
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.0.1     0.0.0.0         UG    100    0        0 eth0
+192.168.0.0     0.0.0.0         255.255.255.0   U     100    0        0 eth0
+224.224.224.245 0.0.0.0         255.255.255.255 UH    0      0        0 eth0

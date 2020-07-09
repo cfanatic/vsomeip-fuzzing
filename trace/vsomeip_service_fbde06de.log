@@ -1,0 +1,40 @@
+Service on 192.168.0.3
+======================
+
+2020-05-30 18:17:25.246720 [info] Parsed vsomeip configuration in 0ms
+2020-05-30 18:17:25.247825 [info] Using configuration file: "./vsomeip.json".
+2020-05-30 18:17:25.248120 [info] Initializing vsomeip application "!!SERVICE!!".
+2020-05-30 18:17:25.248698 [info] Instantiating routing manager [Host].
+2020-05-30 18:17:25.249155 [info] create_local_server Routing endpoint at /tmp/vsomeip-0
+2020-05-30 18:17:25.250065 [info] Service Discovery enabled. Trying to load module.
+2020-05-30 18:17:25.251435 [info] Service Discovery module loaded.
+2020-05-30 18:17:25.251914 [info] Application(!!SERVICE!!, 1212) is initialized (11, 100).
+2020-05-30 18:17:25.252178 [info] OFFER(1212): [1234.5678:0.0] (true)
+2020-05-30 18:17:25.253108 [info] Listening at /tmp/vsomeip-1212
+2020-05-30 18:17:25.253452 [info] Starting vsomeip application "!!SERVICE!!" (1212) using 2 threads I/O nice 255
+2020-05-30 18:17:25.254295 [info] main dispatch thread id from application: 1212 (!!SERVICE!!) is: 7fac232b1700 TID: 2873
+2020-05-30 18:17:25.254683 [info] Watchdog is disabled!
+2020-05-30 18:17:25.255933 [info] io thread id from application: 1212 (!!SERVICE!!) is: 7fac2331b680 TID: 2872
+2020-05-30 18:17:25.254698 [info] shutdown thread id from application: 1212 (!!SERVICE!!) is: 7fac22ab0700 TID: 2874
+2020-05-30 18:17:25.256058 [info] io thread id from application: 1212 (!!SERVICE!!) is: 7fac21aae700 TID: 2876
+2020-05-30 18:17:25.256552 [info] vSomeIP 3.1.15.1 | (default)
+2020-05-30 18:17:25.257418 [info] Network interface "eth0" state changed: up
+2020-05-30 18:17:25.258715 [info] Route "default route (0.0.0.0/0) if: eth0 gw: 192.168.0.1" state changed: up
+2020-05-30 18:17:25.259512 [info] udp_server_endpoint_impl: SO_RCVBUF is: 212992
+2020-05-30 18:17:25.259790 [debug] Joining to multicast group 224.224.224.245 from 192.168.0.3
+2020-05-30 18:17:25.260053 [info] udp_server_endpoint_impl: SO_RCVBUF (Multicast) is: 212992
+2020-05-30 18:17:25.263663 [info] udp_server_endpoint_impl: SO_RCVBUF is: 212992
+2020-05-30 18:17:25.263939 [info] SOME/IP routing ready.
+2020-05-30 18:17:25.264175 [warning] Route "224.224.224.245/32 if: eth0 gw: n/a" state changed: up
+2020-05-30 18:17:29.683520 [info] --SERVICE-- Received message with Client/Session [1313/0001] 00 01 02 03 04 05 06 07 08 09 
+2020-05-30 18:17:31.676709 [warning] Didn't receive a multicast SD message for 2200ms.
+2020-05-30 18:17:31.677699 [debug] Leaving the multicast group 224.224.224.245 from 192.168.0.3
+2020-05-30 18:17:31.681625 [debug] Joining to multicast group 224.224.224.245 from 192.168.0.3
+2020-05-30 18:17:31.682063 [info] udp_server_endpoint_impl: SO_RCVBUF (Multicast) is: 212992
+2020-05-30 18:17:33.686101 [warning] Didn't receive a multicast SD message for 2200ms.
+2020-05-30 18:17:33.686846 [debug] Leaving the multicast group 224.224.224.245 from 192.168.0.3
+2020-05-30 18:17:33.690809 [debug] Joining to multicast group 224.224.224.245 from 192.168.0.3
+2020-05-30 18:17:33.691200 [info] udp_server_endpoint_impl: SO_RCVBUF (Multicast) is: 212992
+CTRL+C
+2020-05-30 18:17:34.753415 [info] Stopping vsomeip application "!!SERVICE!!" (1212).
+2020-05-30 18:17:34.759025 [info] Exiting vsomeip application...
