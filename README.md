@@ -73,3 +73,17 @@ cmake ..
 make
 LD_LIBRARY_PATH=/root/vsomeip/build ./service
 ```
+
+### 6. Fuzz tutorial
+
+Replace the call to `cmake` in section 4 with the following instruction below:
+
+```bash
+CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake -DENABLE_SIGNAL_HANDLING=1 -DENABLE_MULTIPLE_ROUTING_MANAGERS=1 ..
+```
+
+Replace the call to `cmake` in section 5 with the following instruction below:
+
+```bash
+CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake ..
+```
