@@ -25,12 +25,12 @@ void on_message_service(const std::shared_ptr<vsomeip::message> &_request)
 {
     std::string str_payload;
     str_payload.append(reinterpret_cast<const char *>(_request->get_payload()->get_data()), 0, _request->get_payload()->get_length());
-
     VSOMEIP_INFO << "--SERVICE-- Received message with Client/Session ["
                  << std::setw(4) << std::setfill('0') << std::hex << _request->get_client() << "/"
                  << std::setw(4) << std::setfill('0') << std::hex << _request->get_session() << "] "
                  << str_payload;
 
+    VSOMEIP_INFO << "--SERVICE-- Sending message to Client";
     std::shared_ptr<vsomeip::message> its_response = vsomeip::runtime::get()->create_response(_request);
     std::shared_ptr<vsomeip::payload> its_payload = vsomeip::runtime::get()->create_payload();
     std::string str("HELLO CLIENT!");
@@ -53,7 +53,7 @@ void start_service()
 
 void send_message_client()
 {
-    VSOMEIP_INFO << "--CLIENT-- Send message to Service";
+    VSOMEIP_INFO << "--CLIENT-- Sending message to Service";
     std::shared_ptr<vsomeip::message> request = vsomeip::runtime::get()->create_request();
     request->set_service(SAMPLE_SERVICE_ID);
     request->set_instance(SAMPLE_INSTANCE_ID);
@@ -69,7 +69,6 @@ void on_message_client(const std::shared_ptr<vsomeip::message> &_response)
 {
     std::string str_payload;
     str_payload.append(reinterpret_cast<const char *>(_response->get_payload()->get_data()), 0, _response->get_payload()->get_length());
-
     VSOMEIP_INFO << "--CLIENT-- Received message with Client/Session ["
                  << std::setw(4) << std::setfill('0') << std::hex << _response->get_client() << "/"
                  << std::setw(4) << std::setfill('0') << std::hex << _response->get_session() << "] "
