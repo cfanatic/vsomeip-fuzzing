@@ -101,33 +101,39 @@ void start_client()
 
 // ---- Main -------------------------------------------------------------------------------------------------
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     char chr;
-
-    std::ifstream file(argv[1]);
+    std::ifstream file;
     std::stringstream buffer;
-    buffer << file.rdbuf();
-    afl_msg = buffer.str();
-    afl_msg.erase(std::remove(afl_msg.begin(), afl_msg.end(), '\n'), afl_msg.end());
 
-    std::thread service(start_service);
-    std::thread client(start_client);
+    while (__AFL_LOOP(1000))
+    {
+        file.open(argv[1]);
+        buffer.str("");
+        buffer << file.rdbuf();
+        afl_msg = buffer.str();
+        afl_msg.erase(std::remove(afl_msg.begin(), afl_msg.end(), '\n'), afl_msg.end());
 
-    std::unique_lock<std::mutex> its_lock(mutex);
-    condition.wait(its_lock); // wait until the Service is available
+        std::thread service(start_service);
+        std::thread client(start_client);
 
-    std::thread sender(send_message_client);
-    sender.detach();
+        std::unique_lock<std::mutex> its_lock(mutex);
+        condition.wait(its_lock); // wait until the Service is available
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(20)); // wait until the Client has received the response from the Service
+        std::thread sender(send_message_client);
+        sender.detach();
 
-    app_client->clear_all_handler();
-    app_client->release_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
-    app_client->stop();
-    client.join();
-    app_service->clear_all_handler();
-    app_service->release_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
-    app_service->stop();
-    service.join();
+        std::this_thread::sleep_for(std::chrono::milliseconds(20)); // wait until the Client has received the response from the Service
+
+        app_client->clear_all_handler();
+        app_client->release_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
+        app_client->stop();
+        client.join();
+        app_service->clear_all_handler();
+        app_service->release_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
+        app_service->stop();
+        service.join();
+        file.close();
+    }
 }
