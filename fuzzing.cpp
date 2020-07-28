@@ -1,8 +1,10 @@
+#include <algorithm>
 #include <chrono>
+#include <condition_variable>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <condition_variable>
 #include <thread>
 
 #include <vsomeip/vsomeip.hpp>
@@ -30,11 +32,10 @@ void on_message_service(const std::shared_ptr<vsomeip::message> &_request)
                  << std::setw(4) << std::setfill('0') << std::hex << _request->get_session() << "] "
                  << str_payload;
 
-    VSOMEIP_INFO << "--SERVICE-- Sending message to Client";
+    VSOMEIP_INFO << "--SERVICE-- Sending message back to Client";
     std::shared_ptr<vsomeip::message> its_response = vsomeip::runtime::get()->create_response(_request);
     std::shared_ptr<vsomeip::payload> its_payload = vsomeip::runtime::get()->create_payload();
-    std::string str("HELLO CLIENT!");
-    std::vector<vsomeip::byte_t> its_payload_data(std::begin(str), std::end(str));
+    std::vector<vsomeip::byte_t> its_payload_data(std::begin(str_payload), std::end(str_payload));
     its_payload->set_data(its_payload_data);
     its_response->set_payload(its_payload);
     app_service->send(its_response);
@@ -58,6 +59,7 @@ void send_message_client()
     request->set_service(SAMPLE_SERVICE_ID);
     request->set_instance(SAMPLE_INSTANCE_ID);
     request->set_method(SAMPLE_METHOD_ID);
+    VSOMEIP_FATAL << "AFL: " << afl_msg; // VSOMEIP_FATAL is used as a workaround to reduce the log file size
     std::shared_ptr<vsomeip::payload> its_payload = vsomeip::runtime::get()->create_payload();
     std::vector<vsomeip::byte_t> its_payload_data(std::begin(afl_msg), std::end(afl_msg));
     its_payload->set_data(its_payload_data);
@@ -99,9 +101,15 @@ void start_client()
 
 // ---- Main -------------------------------------------------------------------------------------------------
 
-int main()
+int main(int argc, char* argv[])
 {
     char chr;
+
+    std::ifstream file(argv[1]);
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    afl_msg = buffer.str();
+    afl_msg.erase(std::remove(afl_msg.begin(), afl_msg.end(), '\n'), afl_msg.end());
 
     std::thread service(start_service);
     std::thread client(start_client);
@@ -109,11 +117,10 @@ int main()
     std::unique_lock<std::mutex> its_lock(mutex);
     condition.wait(its_lock); // wait until the Service is available
 
-    afl_msg = "afl_fuzzer_input";
     std::thread sender(send_message_client);
     sender.detach();
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(500)); // wait until the Client has received the response from the Service
+    std::this_thread::sleep_for(std::chrono::milliseconds(20)); // wait until the Client has received the response from the Service
 
     app_client->clear_all_handler();
     app_client->release_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
