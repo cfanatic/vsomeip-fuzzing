@@ -1,0 +1,11 @@
+{
+    "logging": {
+        "level": "fatal",
+        "console": "true",
+        "file": {
+            "enable": "true",
+            "path": "/tmp/vsomeip_client.log"
+        },
+        "dlt": "false"
+    }
+}
