@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <string>
 #include <thread>
 
 #include <vsomeip/vsomeip.hpp>
@@ -21,6 +22,17 @@ std::condition_variable condition;
 
 std::string afl_msg;
 
+// ---- Crash ------------------------------------------------------------------------------------------------
+
+void crash_thread(std::string payload)
+{
+    std::vector<std::string> v = {"Hello", "hullo", "hell"};
+    if (std::find(v.begin(), v.end(), payload) != v.end())
+    {
+        *(int *)0 = 0; // crash: null pointers cannot hold a value
+    }
+}
+
 // ---- Service ----------------------------------------------------------------------------------------------
 
 void on_message_service(const std::shared_ptr<vsomeip::message> &_request)
@@ -31,6 +43,9 @@ void on_message_service(const std::shared_ptr<vsomeip::message> &_request)
                  << std::setw(4) << std::setfill('0') << std::hex << _request->get_client() << "/"
                  << std::setw(4) << std::setfill('0') << std::hex << _request->get_session() << "] "
                  << str_payload;
+    #ifdef CRASH_SERVICE
+    crash_thread(str_payload);
+    #endif
 
     VSOMEIP_INFO << "--SERVICE-- Sending message back to Client";
     std::shared_ptr<vsomeip::message> its_response = vsomeip::runtime::get()->create_response(_request);
@@ -75,6 +90,9 @@ void on_message_client(const std::shared_ptr<vsomeip::message> &_response)
                  << std::setw(4) << std::setfill('0') << std::hex << _response->get_client() << "/"
                  << std::setw(4) << std::setfill('0') << std::hex << _response->get_session() << "] "
                  << str_payload;
+    #ifdef CRASH_CLIENT
+    crash_thread(str_payload);
+    #endif
 }
 
 void on_availability_client(vsomeip::service_t _service, vsomeip::instance_t _instance, bool _is_available)
