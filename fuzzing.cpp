@@ -43,9 +43,9 @@ void on_message_service(const std::shared_ptr<vsomeip::message> &_request)
                  << std::setw(4) << std::setfill('0') << std::hex << _request->get_client() << "/"
                  << std::setw(4) << std::setfill('0') << std::hex << _request->get_session() << "] "
                  << str_payload;
-    #ifdef CRASH_SERVICE
+#ifdef CRASH_SERVICE
     crash_thread(str_payload);
-    #endif
+#endif
 
     VSOMEIP_INFO << "--SERVICE-- Sending message back to Client";
     std::shared_ptr<vsomeip::message> its_response = vsomeip::runtime::get()->create_response(_request);
@@ -54,6 +54,9 @@ void on_message_service(const std::shared_ptr<vsomeip::message> &_request)
     its_payload->set_data(its_payload_data);
     its_response->set_payload(its_payload);
     app_service->send(its_response);
+#ifdef CRASH_LIBRARY
+    VSOMEIP_FATAL << str_payload; // trigger crash in instrumented vsomeip/implementation/logger/src/message.cpp
+#endif
 }
 
 void start_service()
@@ -90,9 +93,9 @@ void on_message_client(const std::shared_ptr<vsomeip::message> &_response)
                  << std::setw(4) << std::setfill('0') << std::hex << _response->get_client() << "/"
                  << std::setw(4) << std::setfill('0') << std::hex << _response->get_session() << "] "
                  << str_payload;
-    #ifdef CRASH_CLIENT
+#ifdef CRASH_CLIENT
     crash_thread(str_payload);
-    #endif
+#endif
 }
 
 void on_availability_client(vsomeip::service_t _service, vsomeip::instance_t _instance, bool _is_available)
