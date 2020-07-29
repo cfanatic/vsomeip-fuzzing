@@ -1,6 +1,6 @@
 # vsomeip-testing
 
-This manual describes the necessary steps to follow in order to compile the code examples in the [GENIVI/vsomeip in 10 minutes](https://github.com/GENIVI/vsomeip/wiki/vsomeip-in-10-minutes#first) tutorial on a macOS host .
+This manual describes the necessary steps to follow in order to compile the code examples in the [GENIVI/vsomeip in 10 minutes](https://github.com/GENIVI/vsomeip/wiki/vsomeip-in-10-minutes#first) tutorial on a macOS host. Also, it describes how to configure the tutorial for fuzzing with AFL++.
 
 A Dockerfile will follow at a later point in time.
 
@@ -86,4 +86,33 @@ Replace the call to `cmake` in section 5 with the following instruction below:
 
 ```bash
 CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake ..
+```
+
+Run a fuzzing session by calling:
+
+```bash
+afl-fuzz -m 500 -i afl/input/ -o afl/finding/ ./fuzzing @@
+```
+
+### 7. Instrument library
+
+You might want to make sure that AFL++ catches crashes in the vsomeip library prior to long fuzzing sessions. You can add following code to `vsomeip/implementation/logger/src/message.cpp` which causes a null pointer exception whenever the fuzzed payload in `buffer_` is equal to one of the items in vector `v`:
+
+```cpp
+#ifdef CRASH_LIBRARY
+if (level_ == level_e::LL_FATAL) {
+    std::vector<std::string> v = {"Hello", "hullo", "hell"};
+    if (std::find(v.begin(), v.end(), buffer_.data_.str()) != v.end()) {
+        *(int *)0 = 0; // crash: null pointers cannot hold a value
+    }
+}
+#endif
+````
+
+The crash can be triggered by inserting the fuzzed payload to the `<<` operator of `VSOMEIP_FATAL` somewhere in `fuzzing.cpp`:
+
+```cpp
+#ifdef CRASH_LIBRARY
+VSOMEIP_FATAL << str_payload;
+#endif
 ```
