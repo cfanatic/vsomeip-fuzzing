@@ -12,8 +12,8 @@ include_directories (
 )
 
 add_executable(service service.cpp)
-add_executable(client client.cpp)
+add_executable(request request.cpp)
 add_executable(fuzzing fuzzing.cpp)
 target_link_libraries(service vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
-target_link_libraries(client vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
+target_link_libraries(request vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
 target_link_libraries(fuzzing vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
