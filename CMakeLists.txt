@@ -11,9 +11,9 @@ include_directories (
     ${Boost_INCLUDE_DIR}
 )
 
-add_executable(service service.cpp)
+add_executable(response response.cpp)
 add_executable(request request.cpp)
 add_executable(fuzzing fuzzing.cpp)
-target_link_libraries(service vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
+target_link_libraries(response vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
 target_link_libraries(request vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
 target_link_libraries(fuzzing vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
