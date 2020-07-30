@@ -56,7 +56,7 @@ public:
     {
         if (_state == vsomeip::state_type_e::ST_REGISTERED)
         {
-            app_->request_service(Request::service_id__, Request::service_instance_id__); // tell that we want to use a service
+            app_->request_service(Request::service_id__, Request::service_instance_id__);
         }
     }
 
@@ -80,8 +80,8 @@ public:
         std::string str_payload;
         str_payload.append(reinterpret_cast<const char *>(_response->get_payload()->get_data()), 0, _response->get_payload()->get_length());
 
-        VSOMEIP_INFO << "--REQUEST-- Received message with Client/Session ["
-                     << std::setw(4) << std::setfill('0') << std::hex << _response->get_client() << "/"
+        VSOMEIP_INFO << "--REQUEST-- Received response with Service/Session ["
+                     << std::setw(4) << std::setfill('0') << std::hex << _response->get_service() << "/"
                      << std::setw(4) << std::setfill('0') << std::hex << _response->get_session() << "] "
                      << str_payload;
     }
@@ -123,22 +123,22 @@ private:
     static const vsomeip::instance_t service_instance_id__ = 0x5678;
 };
 
-Request *r_ptr(nullptr);
+Request *req_ptr(nullptr);
 
 void terminate(int _signal)
 {
-    if (r_ptr != nullptr && (_signal == SIGINT || _signal == SIGTERM))
+    if (req_ptr != nullptr && (_signal == SIGINT || _signal == SIGTERM))
     {
-        r_ptr->stop();
+        req_ptr->stop();
     }
 }
 
 int main()
 {
-    Request r;
-    r_ptr = &r;
+    Request req;
+    req_ptr = &req;
     signal(SIGINT, terminate);
     signal(SIGTERM, terminate);
-    r.init();
-    r.start();
+    req.init();
+    req.start();
 }
