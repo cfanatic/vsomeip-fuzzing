@@ -16,8 +16,11 @@ public:
 
     ~Request()
     {
-        message_loop_.join();
-        VSOMEIP_INFO << "--REQUEST-- Message loop joined";
+        if (message_loop_.joinable() == true)
+        {
+            message_loop_.join();
+            VSOMEIP_INFO << "--REQUEST-- Message loop joined";
+        }
     }
 
     void init()
