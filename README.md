@@ -70,7 +70,7 @@ cd /root/vsomeip/examples/tutorial
 git clone https://github.com/cfanatic/vsomeip-testing.git
 cd build
 cmake ..
-make
+make request response
 LD_LIBRARY_PATH=/root/vsomeip/build ./service
 ```
 
@@ -82,10 +82,11 @@ Replace the call to `cmake` in section 4 with the following instruction below:
 CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake -DENABLE_SIGNAL_HANDLING=1 -DENABLE_MULTIPLE_ROUTING_MANAGERS=1 ..
 ```
 
-Replace the call to `cmake` in section 5 with the following instruction below:
+Replace the calls to `cmake` and `make` in section 5 with the following instruction below:
 
 ```bash
 CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake ..
+make fuzzing
 ```
 
 Run a fuzzing session by calling:
