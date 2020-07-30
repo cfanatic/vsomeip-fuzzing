@@ -12,7 +12,7 @@
 class Response
 {
 public:
-    Response() : app_(vsomeip::runtime::get()->create_application("!!RESPONSE!!"))
+    Response() : app_(vsomeip::runtime::get()->create_application("!!SERVICE!!"))
     {
     }
 

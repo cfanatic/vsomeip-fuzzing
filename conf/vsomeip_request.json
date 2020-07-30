@@ -11,7 +11,7 @@
     },
     "applications": [
         {
-            "name": "!!REQUEST!!",
+            "name": "!!CLIENT!!",
             "id": "0x1313"
         }
     ],
@@ -22,7 +22,7 @@
             "unreliable": "30510"
         }
     ],
-    "routing": "!!REQUEST!!",
+    "routing": "!!CLIENT!!",
     "service-discovery": {
         "enable": "true",
         "multicast": "224.224.224.245",

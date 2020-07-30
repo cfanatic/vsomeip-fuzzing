@@ -11,7 +11,7 @@
     },
     "applications": [
         {
-            "name": "!!RESPONSE!!",
+            "name": "!!SERVICE!!",
             "id": "0x1212"
         }
     ],
@@ -22,7 +22,7 @@
             "unreliable": "30509"
         }
     ],
-    "routing": "!!RESPONSE!!",
+    "routing": "!!SERVICE!!",
     "service-discovery": {
         "enable": "true",
         "multicast": "224.224.224.245",

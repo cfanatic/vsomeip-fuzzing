@@ -14,7 +14,7 @@
 class Publish
 {
 public:
-    Publish() : app_(vsomeip::runtime::get()->create_application("!!PUBLISH!!"))
+    Publish() : app_(vsomeip::runtime::get()->create_application("!!SERVICE!!"))
     {
     }
 
@@ -40,7 +40,6 @@ public:
     {
         if (_state == vsomeip::state_type_e::ST_REGISTERED)
         {
-	    VSOMEIP_INFO << "test";
             const vsomeip::byte_t its_data[] = {0x99};
             std::shared_ptr<vsomeip::payload> payload = vsomeip::runtime::get()->create_payload();
             payload->set_data(its_data, sizeof(its_data));

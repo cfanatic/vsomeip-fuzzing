@@ -14,7 +14,7 @@
 class Request
 {
 public:
-    Request() : app_(vsomeip::runtime::get()->create_application("!!REQUEST!!"))
+    Request() : app_(vsomeip::runtime::get()->create_application("!!CLIENT!!"))
     {
     }
 
