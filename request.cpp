@@ -7,6 +7,10 @@
 #include <vsomeip/vsomeip.hpp>
 #include <vsomeip/internal/logger.hpp>
 
+#define SERVICE_ID 0x1234
+#define SERVICE_METHOD_ID 0x0421
+#define SERVICE_INSTANCE_ID 0x5678
+
 class Request
 {
 public:
@@ -121,9 +125,9 @@ private:
     std::shared_ptr<vsomeip::application> app_;
     std::thread message_loop_;
     bool stop_ = false;
-    static const vsomeip::service_t service_id__ = 0x1234;
-    static const vsomeip::method_t service_method_id__ = 0x0421;
-    static const vsomeip::instance_t service_instance_id__ = 0x5678;
+    static const vsomeip::service_t service_id__ = SERVICE_ID;
+    static const vsomeip::method_t service_method_id__ = SERVICE_METHOD_ID;
+    static const vsomeip::instance_t service_instance_id__ = SERVICE_INSTANCE_ID;
 };
 
 Request *req_ptr(nullptr);
