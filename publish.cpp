@@ -40,8 +40,10 @@ public:
     void init()
     {
         std::lock_guard<std::mutex> its_lock(mutex_);
+
         app_->init();
         app_->register_state_handler(std::bind(&Publish::on_state_cbk, this, std::placeholders::_1));
+
         std::set<vsomeip::eventgroup_t> its_groups;
         its_groups.insert(SERVICE_EVENTGROUP_ID);
         app_->offer_event(
@@ -50,12 +52,14 @@ public:
             Publish::service_event_id__,
             its_groups,
             vsomeip::event_type_e::ET_FIELD, std::chrono::milliseconds::zero(),
-            false, true, nullptr, vsomeip::reliability_type_e::RT_UNKNOWN);
+            false,
+            true,
+            nullptr,
+            vsomeip::reliability_type_e::RT_UNKNOWN);
         {
             std::lock_guard<std::mutex> its_lock(payload_mutex_);
             payload_ = vsomeip::runtime::get()->create_payload();
         }
-
         blocked_ = true;
         condition_.notify_one();
     }
