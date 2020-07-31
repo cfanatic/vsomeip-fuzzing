@@ -61,6 +61,7 @@ public:
             std::lock_guard<std::mutex> its_lock(payload_mutex_);
             payload_ = vsomeip::runtime::get()->create_payload();
         }
+
         blocked_ = true;
         condition_.notify_one();
     }
@@ -105,12 +106,14 @@ public:
 
     void run()
     {
-        VSOMEIP_INFO << "in run";
+        bool is_offer = true;
+        
+        VSOMEIP_INFO << "--PUBLISH-- Entering run() thread";
+
         std::unique_lock<std::mutex> its_lock(mutex_);
         while (!blocked_)
             condition_.wait(its_lock); // calling condition_.notify_one() in init() unblocks the waiting thread "run"
-        VSOMEIP_INFO << "running ater condition_ unblock";
-        bool is_offer(true);
+        
         while (running_)
         {
             if (is_offer)
@@ -125,13 +128,15 @@ public:
 
     void notify()
     {
+        vsomeip::byte_t its_data[10];
+        uint32_t its_size = 1;
+        
+        VSOMEIP_INFO << "--PUBLISH-- Entering notify() thread";
+
         std::shared_ptr<vsomeip::message> its_message = vsomeip::runtime::get()->create_request();
         its_message->set_service(Publish::service_id__);
         its_message->set_method(Publish::service_method_id__);
         its_message->set_instance(Publish::service_instance_id__);
-
-        vsomeip::byte_t its_data[10];
-        uint32_t its_size = 1;
 
         while (running_)
         {
