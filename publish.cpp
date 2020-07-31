@@ -39,8 +39,25 @@ public:
 
     void init()
     {
+        std::lock_guard<std::mutex> its_lock(mutex_);
         app_->init();
         app_->register_state_handler(std::bind(&Publish::on_state_cbk, this, std::placeholders::_1));
+        std::set<vsomeip::eventgroup_t> its_groups;
+        its_groups.insert(SERVICE_EVENTGROUP_ID);
+        app_->offer_event(
+            Publish::service_id__,
+            Publish::service_instance_id__,
+            Publish::service_event_id__,
+            its_groups,
+            vsomeip::event_type_e::ET_FIELD, std::chrono::milliseconds::zero(),
+            false, true, nullptr, vsomeip::reliability_type_e::RT_UNKNOWN);
+        {
+            std::lock_guard<std::mutex> its_lock(payload_mutex_);
+            payload_ = vsomeip::runtime::get()->create_payload();
+        }
+
+        blocked_ = true;
+        condition_.notify_one();
     }
 
     void start()
@@ -83,10 +100,11 @@ public:
 
     void run()
     {
+        VSOMEIP_INFO << "in run";
         std::unique_lock<std::mutex> its_lock(mutex_);
         while (!blocked_)
             condition_.wait(its_lock); // calling condition_.notify_one() in init() unblocks the waiting thread "run"
-
+        VSOMEIP_INFO << "running ater condition_ unblock";
         bool is_offer(true);
         while (running_)
         {
@@ -110,8 +128,6 @@ public:
         vsomeip::byte_t its_data[10];
         uint32_t its_size = 1;
 
-        std::cout << sizeof(its_data) << std::endl;
-
         while (running_)
         {
             std::unique_lock<std::mutex> its_lock(notify_mutex_);
@@ -127,7 +143,7 @@ public:
                     std::lock_guard<std::mutex> its_lock(payload_mutex_);
                     std::cout << "Setting event (Length=" << std::dec << its_size << ")." << std::endl;
                     payload_->set_data(its_data, its_size);
-                    app_->notify(Publish::service_id__, Publish::service_instance_id__, Publish::service_event_id, payload_);
+                    app_->notify(Publish::service_id__, Publish::service_instance_id__, Publish::service_event_id__, payload_);
                 }
                 its_size++;
                 std::this_thread::sleep_for(std::chrono::milliseconds(Publish::cycle__)); // messages with payload [0], [0 1], [0 1 2], [1 2 3], etc. are sent each second
@@ -152,7 +168,7 @@ private:
     static const vsomeip::service_t service_id__ = SERVICE_ID;
     static const vsomeip::method_t service_method_id__ = SERVICE_METHOD_ID;
     static const vsomeip::instance_t service_instance_id__ = SERVICE_INSTANCE_ID;
-    static const vsomeip::instance_t service_event_id = SERVICE_EVENT_ID;
+    static const vsomeip::event_t service_event_id__ = SERVICE_EVENT_ID;
 };
 
 const uint32_t Publish::cycle__;
