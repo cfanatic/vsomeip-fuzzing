@@ -46,16 +46,17 @@ public:
 
         std::set<vsomeip::eventgroup_t> its_groups;
         its_groups.insert(SERVICE_EVENTGROUP_ID);
-        app_->offer_event(
+        app_->offer_event( // REGISTER EVENT(1212): [1234.5678.8778:is_provider=true]
             Publish::service_id__,
             Publish::service_instance_id__,
             Publish::service_event_id__,
             its_groups,
-            vsomeip::event_type_e::ET_FIELD, std::chrono::milliseconds::zero(),
+            vsomeip::event_type_e::ET_FIELD,
+            std::chrono::milliseconds::zero(),
             false,
             true,
             nullptr,
-            vsomeip::reliability_type_e::RT_UNKNOWN);
+            vsomeip::reliability_type_e::RT_UNRELIABLE);
         {
             std::lock_guard<std::mutex> its_lock(payload_mutex_);
             payload_ = vsomeip::runtime::get()->create_payload();
@@ -145,7 +146,7 @@ public:
                     its_data[i] = static_cast<uint8_t>(i);
                 {
                     std::lock_guard<std::mutex> its_lock(payload_mutex_);
-                    std::cout << "Setting event (Length=" << std::dec << its_size << ")." << std::endl;
+                    VSOMEIP_INFO << "Setting event (Length=" << std::dec << its_size << ").";
                     payload_->set_data(its_data, its_size);
                     app_->notify(Publish::service_id__, Publish::service_instance_id__, Publish::service_event_id__, payload_);
                 }
