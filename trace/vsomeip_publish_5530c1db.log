@@ -1,0 +1,61 @@
+2020-06-31 16:21:58.809347 [info] Parsed vsomeip configuration in 0ms
+2020-06-31 16:21:58.810091 [info] Using configuration file: "./vsomeip.json".
+2020-06-31 16:21:58.810352 [info] Initializing vsomeip application "!!SERVICE!!".
+2020-06-31 16:21:58.810747 [info] Instantiating routing manager [Host].
+2020-06-31 16:21:58.811404 [info] create_local_server Routing endpoint at /tmp/vsomeip-0
+2020-06-31 16:21:58.811939 [info] Service Discovery enabled. Trying to load module.
+2020-06-31 16:21:58.814865 [info] Service Discovery module loaded.
+2020-06-31 16:21:58.815409 [info] Application(!!SERVICE!!, 1212) is initialized (11, 100).
+2020-06-31 16:21:58.815815 [info] REGISTER EVENT(1212): [1234.5678.8778:is_provider=true]
+2020-06-31 16:21:58.816073 [info] Starting vsomeip application "!!SERVICE!!" (1212) using 2 threads I/O nice 255
+2020-06-31 16:21:58.816863 [info] main dispatch thread id from application: 1212 (!!SERVICE!!) is: 7fa17ec4d700 TID: 5539
+2020-06-31 16:21:58.817482 [info] Watchdog is disabled!
+2020-06-31 16:21:58.818330 [info] --PUBLISH-- Application !!SERVICE!! is registered.
+2020-06-31 16:21:58.818668 [info] shutdown thread id from application: 1212 (!!SERVICE!!) is: 7fa17e44c700 TID: 5540
+2020-06-31 16:21:58.818456 [info] io thread id from application: 1212 (!!SERVICE!!) is: 7fa17d44a700 TID: 5542
+2020-06-31 16:21:58.818395 [info] io thread id from application: 1212 (!!SERVICE!!) is: 7fa17ed50780 TID: 5538
+2020-06-31 16:21:58.819810 [info] vSomeIP 3.1.15.1 | (default)
+2020-06-31 16:21:58.820706 [info] Network interface "eth0" state changed: up
+2020-06-31 16:21:58.821417 [info] Route "default route (0.0.0.0/0) if: eth0 gw: 192.168.0.1" state changed: up
+2020-06-31 16:21:58.822087 [info] udp_server_endpoint_impl: SO_RCVBUF is: 212992
+2020-06-31 16:21:58.822688 [debug] Joining to multicast group 224.224.224.245 from 192.168.0.3
+2020-06-31 16:21:58.823437 [info] udp_server_endpoint_impl: SO_RCVBUF (Multicast) is: 212992
+2020-06-31 16:21:58.827239 [info] SOME/IP routing ready.
+2020-06-31 16:21:58.819924 [info] --PUBLISH-- Entering run() thread
+2020-06-31 16:21:58.828123 [info] OFFER(1212): [1234.5678:0.0] (true)
+2020-06-31 16:21:58.828535 [info] udp_server_endpoint_impl: SO_RCVBUF is: 212992
+2020-06-31 16:21:58.829161 [info] Listening at /tmp/vsomeip-1212
+2020-06-31 16:21:58.820816 [info] --PUBLISH-- Entering notify() thread
+2020-06-31 16:21:58.829686 [info] Setting event (Length=1).
+2020-06-31 16:21:59.835678 [info] Setting event (Length=2).
+2020-06-31 16:22:00.836973 [info] Setting event (Length=3).
+2020-06-31 16:22:01.864106 [info] Setting event (Length=4).
+2020-06-31 16:22:02.866700 [info] Setting event (Length=5).
+2020-06-31 16:22:03.892738 [info] Setting event (Length=6).
+2020-06-31 16:22:04.904916 [info] Setting event (Length=7).
+2020-06-31 16:22:05.957077 [info] Setting event (Length=8).
+2020-06-31 16:22:06.988402 [info] Setting event (Length=9).
+2020-06-31 16:22:07.996055 [info] Setting event (Length=1).
+2020-06-31 16:22:08.821449 [info] vSomeIP 3.1.15.1 | (default)
+2020-06-31 16:22:08.997623 [info] STOP OFFER(1212): [1234.5678:0.0] (true)
+2020-06-31 16:22:18.867774 [info] vSomeIP 3.1.15.1 | (default)
+2020-06-31 16:22:18.109754 [info] OFFER(1212): [1234.5678:0.0] (true)
+2020-06-31 16:22:18.111927 [info] udp_server_endpoint_impl: SO_RCVBUF is: 212992
+2020-06-31 16:22:18.112612 [info] Setting event (Length=2).
+2020-06-31 16:22:19.114184 [info] Setting event (Length=3).
+2020-06-31 16:22:20.117066 [info] Setting event (Length=4).
+2020-06-31 16:22:21.128601 [info] Setting event (Length=5).
+2020-06-31 16:22:22.159265 [info] Setting event (Length=6).
+2020-06-31 16:22:23.168528 [info] Setting event (Length=7).
+2020-06-31 16:22:24.177286 [info] Setting event (Length=8).
+2020-06-31 16:22:25.187551 [info] Setting event (Length=9).
+2020-06-31 16:22:26.213878 [info] Setting event (Length=1).
+2020-06-31 16:22:27.216915 [info] Setting event (Length=2).
+2020-06-31 16:22:28.876488 [info] vSomeIP 3.1.15.1 | (default)
+2020-06-31 16:22:28.182356 [info] STOP OFFER(1212): [1234.5678:0.0] (true)
+^C2020-06-31 16:22:29.956007 [info] STOP OFFER(1212): [1234.5678:0.0] (true)
+2020-06-31 16:22:29.956839 [warning] stop_offer_service received STOP_OFFER(1212): [1234.5678:0.0] for remote service --> ignore
+2020-06-31 16:22:29.957933 [info] Stopping vsomeip application "!!SERVICE!!" (1212).
+2020-06-31 16:22:30.188126 [info] --PUBLISH-- Offer thread joined
+
+Killed
