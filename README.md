@@ -94,6 +94,13 @@ Run a fuzzing session by calling:
 ```bash
 afl-fuzz -m 500 -i afl/input/ -o afl/finding/ ./fuzzing @@
 ```
+#### 6.1 Compile fuzzing target with gcc
+If it is necessary to compile the fuzzing target with a non-afl-compiler the cmake option `USE_GCC=ON` needs to be used. The calls to `cmake` and `make` might be the follwoing:
+
+```bash
+CC=gcc CXX=g++ cmake -D USE_GCC=ON ..
+make fuzzing
+```
 
 ### 7. Instrument library
 
