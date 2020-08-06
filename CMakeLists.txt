@@ -11,6 +11,12 @@ include_directories(
     ${Boost_INCLUDE_DIR}
 )
 
+option(USE_GCC "If gcc is used AFL-specific code is not used" OFF)
+
+if (USE_GCC)
+  add_definitions(-DCOMPILE_WITH_GCC)
+endif()
+
 add_executable(response response.cpp)
 add_executable(request request.cpp)
 add_executable(publish publish.cpp)
