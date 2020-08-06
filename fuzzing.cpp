@@ -127,9 +127,11 @@ int main(int argc, char *argv[])
     char chr;
     std::ifstream file;
     std::stringstream buffer;
-
+#ifndef COMPILE_WITH_GCC
+    //Do not use __AFL_LOOP when using gcc
     while (__AFL_LOOP(1000))
     {
+#endif
         file.open(argv[1]);
         buffer.str("");
         buffer << file.rdbuf();
@@ -156,5 +158,7 @@ int main(int argc, char *argv[])
         app_service->stop();
         service.join();
         file.close();
+#ifndef COMPILE_WITH_GCC
     }
+#endif
 }
