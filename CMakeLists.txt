@@ -22,7 +22,7 @@ endif()
 
 option(COVERAGE "If coverage support needs to be compiled in" OFF)
 
-if (CONVERAGE)
+if (COVERAGE)
   SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
   SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 endif()
