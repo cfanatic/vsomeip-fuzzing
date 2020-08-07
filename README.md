@@ -74,6 +74,13 @@ make request response
 LD_LIBRARY_PATH=/root/vsomeip/build ./service
 ```
 
+In case you would like to build the fuzzing target with a compiler other than one that is shipped with AFL++, run the following call to `cmake`:
+
+```bash
+CC=gcc CXX=g++ cmake -D USE_GCC=ON ..
+make fuzzing
+```
+
 ### 6. Fuzz tutorial
 
 Replace the call to `cmake` in section 4 with the following instruction below:
@@ -93,13 +100,6 @@ Run a fuzzing session by calling:
 
 ```bash
 afl-fuzz -m 500 -i afl/input/ -o afl/finding/ ./fuzzing @@
-```
-#### 6.1 Compile fuzzing target with gcc
-If it is necessary to compile the fuzzing target with a non-afl-compiler the cmake option `USE_GCC=ON` needs to be used. The calls to `cmake` and `make` might be the follwoing:
-
-```bash
-CC=gcc CXX=g++ cmake -D USE_GCC=ON ..
-make fuzzing
 ```
 
 ### 7. Instrument library
