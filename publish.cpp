@@ -152,7 +152,7 @@ public:
                 {
                     std::lock_guard<std::mutex> its_lock(payload_mutex_);
                     VSOMEIP_INFO << "Setting event (Length=" << std::dec << its_size << ").";
-                    payload_->set_data(its_data, its_size);
+                    payload_->set_data(its_data, its_size); // attribute is changed and so we want to notify the service subscribers
                     app_->notify(Publish::service_id__, Publish::service_instance_id__, Publish::service_event_id__, payload_);
                 }
                 its_size++;
