@@ -127,9 +127,9 @@ int main(int argc, char *argv[])
     char chr;
     std::ifstream file;
     std::stringstream buffer;
+
 #ifndef COMPILE_WITH_GCC
-    //Do not use __AFL_LOOP when using gcc
-    while (__AFL_LOOP(1000))
+    while (__AFL_LOOP(1000)) // macro unknown for gcc compilers
     {
 #endif
         file.open(argv[1]);
