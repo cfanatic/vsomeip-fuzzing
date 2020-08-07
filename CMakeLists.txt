@@ -10,6 +10,22 @@ include_directories(
     ${VSOMEIP_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIR}
 )
+SET(GCC_COVERAGE_COMPILE_FLAGS "-fprofile-arcs -ftest-coverage")
+SET(GCC_COVERAGE_LINK_FLAGS    "-lgcov")
+
+
+option(USE_GCC "If gcc is used AFL-specific code is not used" OFF)
+
+if (USE_GCC)
+  add_definitions(-DCOMPILE_WITH_GCC)
+endif()
+
+option(COVERAGE "If coverage support needs to be compiled in" OFF)
+
+if (COVERAGE)
+  SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+  SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+endif()
 
 add_executable(response response.cpp)
 add_executable(request request.cpp)
