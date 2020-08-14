@@ -24,7 +24,7 @@ std::string afl_input;
 
 // ---- Crash ------------------------------------------------------------------------------------------------
 
-void crash_thread(std::string payload)
+void crash_thread(std::string &payload)
 {
     std::vector<std::string> v = {"Hello", "hullo", "hell"};
     if (std::find(v.begin(), v.end(), payload) != v.end())
