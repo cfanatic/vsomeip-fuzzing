@@ -29,7 +29,7 @@ void crash_thread(std::string payload)
     std::vector<std::string> v = {"Hello", "hullo", "hell"};
     if (std::find(v.begin(), v.end(), payload) != v.end())
     {
-        *(int *)0 = 0; // crash: null pointers cannot hold a value
+        *(int *)0 = 0; // crash: null pointers cannot be dereferenced to a value
     }
 }
 

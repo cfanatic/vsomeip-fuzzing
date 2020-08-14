@@ -111,7 +111,7 @@ You might want to make sure that AFL++ catches crashes in the vsomeip library pr
 if (level_ == level_e::LL_FATAL) {
     std::vector<std::string> v = {"Hello", "hullo", "hell"};
     if (std::find(v.begin(), v.end(), buffer_.data_.str()) != v.end()) {
-        *(int *)0 = 0; // crash: null pointers cannot hold a value
+        *(int *)0 = 0; // crash: null pointers cannot be dereferenced to a value
     }
 }
 #endif
