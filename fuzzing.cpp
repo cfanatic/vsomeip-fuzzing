@@ -120,12 +120,40 @@ void start_client()
     app_client->start();
 }
 
+// ---- Target for Fuzzing -----------------------------------------------------------------------------------
+
+void fuzzing_target(std::string &input)
+{
+    afl_msg = input;
+
+    std::thread service(start_service);
+    std::thread client(start_client);
+
+    std::unique_lock<std::mutex> its_lock(mutex);
+    condition.wait(its_lock); // wait until the Service is available
+
+    std::thread sender(send_message_client);
+    sender.detach();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(20)); // wait until the Client has received the response from the Service
+
+    app_client->clear_all_handler();
+    app_client->release_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
+    app_client->stop();
+    client.join();
+    app_service->clear_all_handler();
+    app_service->release_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
+    app_service->stop();
+    service.join();
+}
+
 // ---- Main -------------------------------------------------------------------------------------------------
 
 int main(int argc, char *argv[])
 {
     char chr;
     std::ifstream file;
+    std::string input;
     std::stringstream buffer;
 
 #ifndef COMPILE_WITH_GCC
@@ -135,28 +163,9 @@ int main(int argc, char *argv[])
         file.open(argv[1]);
         buffer.str("");
         buffer << file.rdbuf();
-        afl_msg = buffer.str();
-        afl_msg.erase(std::remove(afl_msg.begin(), afl_msg.end(), '\n'), afl_msg.end());
-
-        std::thread service(start_service);
-        std::thread client(start_client);
-
-        std::unique_lock<std::mutex> its_lock(mutex);
-        condition.wait(its_lock); // wait until the Service is available
-
-        std::thread sender(send_message_client);
-        sender.detach();
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(20)); // wait until the Client has received the response from the Service
-
-        app_client->clear_all_handler();
-        app_client->release_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
-        app_client->stop();
-        client.join();
-        app_service->clear_all_handler();
-        app_service->release_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
-        app_service->stop();
-        service.join();
+        input = buffer.str();
+        input.erase(std::remove(input.begin(), input.end(), '\n'), input.end());
+        fuzzing_target(input);
         file.close();
 #ifndef COMPILE_WITH_GCC
     }
