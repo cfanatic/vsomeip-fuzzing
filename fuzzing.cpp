@@ -20,7 +20,7 @@ std::shared_ptr<vsomeip::application> app_client;
 std::mutex mutex;
 std::condition_variable condition;
 
-std::string afl_msg;
+std::string afl_input;
 
 // ---- Crash ------------------------------------------------------------------------------------------------
 
@@ -77,9 +77,9 @@ void send_message_client()
     request->set_service(SAMPLE_SERVICE_ID);
     request->set_instance(SAMPLE_INSTANCE_ID);
     request->set_method(SAMPLE_METHOD_ID);
-    VSOMEIP_FATAL << "AFL: " << afl_msg; // VSOMEIP_FATAL is used as a workaround to reduce the log file size
+    VSOMEIP_FATAL << "AFL: " << afl_input; // VSOMEIP_FATAL is used as a workaround to reduce the log file size
     std::shared_ptr<vsomeip::payload> its_payload = vsomeip::runtime::get()->create_payload();
-    std::vector<vsomeip::byte_t> its_payload_data(std::begin(afl_msg), std::end(afl_msg));
+    std::vector<vsomeip::byte_t> its_payload_data(std::begin(afl_input), std::end(afl_input));
     its_payload->set_data(its_payload_data);
     request->set_payload(its_payload);
     app_client->send(request);
@@ -124,7 +124,7 @@ void start_client()
 
 void fuzzing_target(std::string &input)
 {
-    afl_msg = input;
+    afl_input = input;
 
     std::thread service(start_service);
     std::thread client(start_client);
