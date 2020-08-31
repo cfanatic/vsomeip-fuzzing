@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(vsomeip-testing)
 
+set(CMAKE_CXX_FLAGS "-g -std=c++0x")
+
 option(USE_GCC "Set gcc compiler support for AFL coverage report generation" OFF)
 option(COVERAGE "Set gcc compiler flags for AFL coverage report generation" OFF)
 
@@ -16,8 +18,6 @@ if (COVERAGE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 endif()
-
-set(CMAKE_CXX_FLAGS "-g -std=c++0x")
 
 find_package(vsomeip3 3.1.14 REQUIRED)
 find_package(Boost 1.65.1 COMPONENTS system thread log REQUIRED)
