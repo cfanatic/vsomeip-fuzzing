@@ -1,8 +1,11 @@
-# vsomeip-testing
+# vsomeip-fuzzing
 
-This manual describes the necessary steps to follow in order to compile the code examples in the [GENIVI/vsomeip in 10 minutes](https://github.com/GENIVI/vsomeip/wiki/vsomeip-in-10-minutes#first) tutorial on a macOS host. Also, it describes how to configure the tutorial for fuzzing with AFL++.
+In the automotive industry, the SOME/IP protocol is used for Ethernet-based communication. It will gain in popularity in the future, since self-driving cars record large amounts of data which needs to be transmitted among sensors, actuators and control units in real-time. A robust protocol implementation is key for secure and safe vehicle operation.
 
-A Dockerfile will follow at a later point in time.
+This repository hosts a fuzz testing suite based on [AFL++](https://github.com/AFLplusplus/AFLplusplus) for a [SOME/IP implementation](https://github.com/GENIVI/vsomeip) developed by BMW AG. The setup instructions below explain how to build the code examples of the [GENIVI/vsomeip in 10 minutes](https://github.com/GENIVI/vsomeip/wiki/vsomeip-in-10-minutes#first) tutorial, which are used as the fuzzing targets.
+
+According to Wikipedia:
+> Fuzzing is an automated software testing technique that involves providing invalid, unexpected, or random data as inputs to a computer program. The program is then monitored for exceptions such as crashes, failing built-in code assertions, or potential memory leaks.
 
 ## Requirements
 
@@ -67,7 +70,7 @@ make
 ```bash
 mkdir -p /root/vsomeip/examples/tutorial/build
 cd /root/vsomeip/examples/tutorial
-git clone https://github.com/cfanatic/vsomeip-testing.git
+git clone https://github.com/cfanatic/vsomeip-fuzzing.git
 cd build
 cmake ..
 make request response

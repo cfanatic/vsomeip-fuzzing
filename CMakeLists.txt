@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(vsomeip-testing)
+project(vsomeip-fuzzing)
 
 option(USE_GCC "Use gcc compiler to generate AFL coverage reports" OFF)
 option(COVERAGE "Enable support for AFL coverage reports" OFF)
