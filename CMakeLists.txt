@@ -1,21 +1,23 @@
 cmake_minimum_required(VERSION 2.8)
 project(vsomeip-fuzzing)
 
-option(USE_GCC "Use gcc compiler to generate AFL coverage reports" OFF)
-option(COVERAGE "Enable support for AFL coverage reports" OFF)
+set(CMAKE_CXX_FLAGS "-g -std=c++0x")
+
+option(USE_GCC "Set gcc compiler support for AFL coverage report generation" OFF)
+option(COVERAGE "Set gcc compiler flags for AFL coverage report generation" OFF)
 
 if (USE_GCC)
+  message("-- Enable gcc compiler support for AFL coverage reports")
   add_definitions(-DCOMPILE_WITH_GCC)
 endif()
 
 if (COVERAGE)
+  message("-- Set gcc compiler flags for AFL coverage reports")
   set(GCC_COVERAGE_COMPILE_FLAGS "-fprofile-arcs -ftest-coverage")
   set(GCC_COVERAGE_LINK_FLAGS "-lgcov")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 endif()
-
-set(CMAKE_CXX_FLAGS "-g -std=c++0x")
 
 find_package(vsomeip3 3.1.14 REQUIRED)
 find_package(Boost 1.65.1 COMPONENTS system thread log REQUIRED)
