@@ -15,6 +15,8 @@
 #define SAMPLE_METHOD_ID 0x0421
 #define SAMPLE_INSTANCE_ID 0x5678
 
+#define CRASH_SERVICE
+
 std::shared_ptr<vsomeip::application> app_service;
 std::shared_ptr<vsomeip::application> app_client;
 std::mutex mutex;

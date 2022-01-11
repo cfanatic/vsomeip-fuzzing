@@ -1,0 +1,10 @@
+SOME/IP
+-------
+- REQUEST/RESPONSE: Mechanism for remote procedure calls
+- PUBLISH/SUBSCRIBE: Pattern for events. Events in the SOME/IP protocol are always grouped in an event group. It is only possible to subscribe to event groups and not to the event itself.
+
+- Instance ID: Service interfaces must be instantiated and because there might be several instances of the same interface, there must be an additional identifier for the instance defined (instance ID). However, the instance ID is not part of the header of the SOME/IP message. The instance is identified via the port number of the transport protocol; that means that it is not possible that several instances of the same interface are offered on the same port.
+
+- Service Discovery: Used to locate "Service Instances" and to detect if "Service Instances" are running, as well as implementing the Publish/Subscribe handling. This is mainly done via so-called "Offer Messages". Each device broadcasts or multicasts messages which contain all the services which are offered by this device. If services are required by client applications, but at the moment not offered, then also "Find Messages" can be sent. Other SOME/IP SD messages can be used for publishing or subscribing an eventgroup.
+
+- vsomeip: It covers not only the SOME/IP communication between devices (external communication), but also the internal inter process communication. Two devices communicate via so-called communication endpoints which determine the used transport protocol (TCP or UDP) and its parameters as the port number or other parameters. All these parameters are configuration parameters which can be set in a vsomeip configuration file (json file, see vsomeip user guide). The internal communication is done via local endpoints which are implemented by unix domain sockets using the Boost.Asio library. Since this internal communication is not routed via a central component (e.g. like the D-Bus daemon), it is very fast.
