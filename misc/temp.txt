@@ -10,3 +10,13 @@ SOME/IP
 - vsomeip: It covers not only the SOME/IP communication between devices (external communication), but also the internal inter-process communication. Two devices communicate via so-called "Communication Endpoints" which determine the used transport protocol (TCP or UDP) and its parameters as the port number or other parameters. All these parameters are configuration parameters which can be set in a vsomeip configuration file.
 The internal communication is done via local endpoints which are implemented by Unix Domain Sockets using the Boost.Asio library. Since this internal communication is not routed via a central component, it is very fast.
 The central vsomeip routing manager gets messages only if they have to be sent to external devices and he distributes the messages coming from outside. There is only one routing manager per device. If nothing is configured the first running vsomeip application also starts the routing manager.
+
+
+Commands
+--------
+export LD_LIBRARY_PATH=/home/cfanatic/Coding/C++/vsomeip/build
+
+route -n
+sudo route add -nv 224.224.224.245 dev eth0
+ping 224.224.224.245
+sudo ifconfig eth0 multicast
