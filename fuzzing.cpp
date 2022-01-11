@@ -37,7 +37,7 @@ void crash_thread(std::string &payload)
 
 // ---- Service ----------------------------------------------------------------------------------------------
 
-void on_message_service(const std::shared_ptr<vsomeip::message> &_request)
+void service_on_message(const std::shared_ptr<vsomeip::message> &_request)
 {
     std::string str_payload;
     str_payload.append(reinterpret_cast<const char *>(_request->get_payload()->get_data()), 0, _request->get_payload()->get_length());
@@ -61,18 +61,18 @@ void on_message_service(const std::shared_ptr<vsomeip::message> &_request)
 #endif
 }
 
-void start_service()
+void service_start()
 {
     app_service = vsomeip::runtime::get()->create_application("!!SERVICE!!");
     app_service->init();
-    app_service->register_message_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, SAMPLE_METHOD_ID, on_message_service);
+    app_service->register_message_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, SAMPLE_METHOD_ID, service_on_message);
     app_service->offer_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
     app_service->start();
 }
 
 // ---- Client -----------------------------------------------------------------------------------------------
 
-void send_message_client()
+void client_send_message()
 {
     VSOMEIP_INFO << "--CLIENT-- Sending message to Service";
     std::shared_ptr<vsomeip::message> request = vsomeip::runtime::get()->create_request();
@@ -87,7 +87,7 @@ void send_message_client()
     app_client->send(request);
 }
 
-void on_message_client(const std::shared_ptr<vsomeip::message> &_response)
+void client_on_message(const std::shared_ptr<vsomeip::message> &_response)
 {
     std::string str_payload;
     str_payload.append(reinterpret_cast<const char *>(_response->get_payload()->get_data()), 0, _response->get_payload()->get_length());
@@ -100,7 +100,7 @@ void on_message_client(const std::shared_ptr<vsomeip::message> &_response)
 #endif
 }
 
-void on_availability_client(vsomeip::service_t _service, vsomeip::instance_t _instance, bool _is_available)
+void client_on_availability(vsomeip::service_t _service, vsomeip::instance_t _instance, bool _is_available)
 {
     VSOMEIP_INFO << "--CLIENT-- Service ["
                  << std::setw(4) << std::setfill('0') << std::hex << _service << "." << _instance
@@ -112,13 +112,13 @@ void on_availability_client(vsomeip::service_t _service, vsomeip::instance_t _in
     }
 }
 
-void start_client()
+void client_start()
 {
     app_client = vsomeip::runtime::get()->create_application("!!CLIENT!!");
     app_client->init();
-    app_client->register_availability_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, on_availability_client);
+    app_client->register_availability_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, client_on_availability);
     app_client->request_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
-    app_client->register_message_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, SAMPLE_METHOD_ID, on_message_client);
+    app_client->register_message_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, SAMPLE_METHOD_ID, client_on_message);
     app_client->start();
 }
 
@@ -128,13 +128,13 @@ void fuzzing_target(std::string &input)
 {
     afl_input = input;
 
-    std::thread service(start_service);
-    std::thread client(start_client);
+    std::thread service(service_start);
+    std::thread client(client_start);
 
     std::unique_lock<std::mutex> its_lock(mutex);
     condition.wait(its_lock); // wait until the Service is available
 
-    std::thread sender(send_message_client);
+    std::thread sender(client_send_message);
     sender.detach();
 
     std::this_thread::sleep_for(std::chrono::milliseconds(20)); // wait until the Client has received the response from the Service
