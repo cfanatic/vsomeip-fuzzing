@@ -11,9 +11,9 @@
 #include <vsomeip/vsomeip.hpp>
 #include <vsomeip/internal/logger.hpp>
 
-#define SAMPLE_SERVICE_ID 0x1234
-#define SAMPLE_METHOD_ID 0x0421
-#define SAMPLE_INSTANCE_ID 0x5678
+#define SERVICE_ID 0x1234
+#define METHOD_ID 0x0421
+#define INSTANCE_ID 0x5678
 
 #define CRASH_SERVICE
 
@@ -65,8 +65,8 @@ void service_start()
 {
     app_service = vsomeip::runtime::get()->create_application("!!SERVICE!!");
     app_service->init();
-    app_service->register_message_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, SAMPLE_METHOD_ID, service_on_message);
-    app_service->offer_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
+    app_service->register_message_handler(SERVICE_ID, INSTANCE_ID, METHOD_ID, service_on_message);
+    app_service->offer_service(SERVICE_ID, INSTANCE_ID);
     app_service->start();
 }
 
@@ -76,9 +76,9 @@ void client_send_message()
 {
     VSOMEIP_INFO << "--CLIENT-- Sending message to Service";
     std::shared_ptr<vsomeip::message> request = vsomeip::runtime::get()->create_request();
-    request->set_service(SAMPLE_SERVICE_ID);
-    request->set_instance(SAMPLE_INSTANCE_ID);
-    request->set_method(SAMPLE_METHOD_ID);
+    request->set_service(SERVICE_ID);
+    request->set_instance(INSTANCE_ID);
+    request->set_method(METHOD_ID);
     VSOMEIP_FATAL << "AFL: " << afl_input; // VSOMEIP_FATAL is used as a workaround to reduce the log file size
     std::shared_ptr<vsomeip::payload> its_payload = vsomeip::runtime::get()->create_payload();
     std::vector<vsomeip::byte_t> its_payload_data(std::begin(afl_input), std::end(afl_input));
@@ -116,9 +116,9 @@ void client_start()
 {
     app_client = vsomeip::runtime::get()->create_application("!!CLIENT!!");
     app_client->init();
-    app_client->register_availability_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, client_on_availability);
-    app_client->request_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
-    app_client->register_message_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, SAMPLE_METHOD_ID, client_on_message);
+    app_client->register_availability_handler(SERVICE_ID, INSTANCE_ID, client_on_availability);
+    app_client->request_service(SERVICE_ID, INSTANCE_ID);
+    app_client->register_message_handler(SERVICE_ID, INSTANCE_ID, METHOD_ID, client_on_message);
     app_client->start();
 }
 
@@ -140,11 +140,11 @@ void fuzzing_target(std::string &input)
     std::this_thread::sleep_for(std::chrono::milliseconds(20)); // wait until the Client has received the response from the Service
 
     app_client->clear_all_handler();
-    app_client->release_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
+    app_client->release_service(SERVICE_ID, INSTANCE_ID);
     app_client->stop();
     client.join();
     app_service->clear_all_handler();
-    app_service->release_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
+    app_service->release_service(SERVICE_ID, INSTANCE_ID);
     app_service->stop();
     service.join();
 }
