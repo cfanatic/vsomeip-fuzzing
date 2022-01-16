@@ -29,9 +29,7 @@ include_directories(
 
 add_executable(response response.cpp)
 add_executable(request request.cpp)
-add_executable(publish publish.cpp)
 add_executable(fuzzing fuzzing.cpp)
 target_link_libraries(response vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
 target_link_libraries(request vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
-target_link_libraries(publish vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
 target_link_libraries(fuzzing vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
