@@ -33,17 +33,8 @@ void service_on_message(const std::shared_ptr<vsomeip::message> &_request)
 void fuzzing_target(std::string &input)
 {
     afl_input = input;
-
     app_service = vsomeip::runtime::get()->create_application("!!SERVICE!!");
-
     app_service->init();
-    app_service->register_message_handler(SERVICE_ID, INSTANCE_ID, METHOD_ID, service_on_message);
-    app_service->offer_service(SERVICE_ID, INSTANCE_ID);
-    app_service->start();
-
-    app_service->clear_all_handler();
-    app_service->release_service(SERVICE_ID, INSTANCE_ID);
-    app_service->stop();
 }
 
 // ---- Main -------------------------------------------------------------------------------------------------
