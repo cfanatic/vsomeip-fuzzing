@@ -19,7 +19,7 @@ RUN git clone https://github.com/COVESA/vsomeip.git /src/vsomeip
 RUN sed -i "s/add_subdirectory( examples\/routingmanagerd )/# add_subdirectory( examples\/routingmanagerd )/g" /src/vsomeip/CMakeLists.txt
 RUN mkdir -p /src/vsomeip/build
 WORKDIR /src/vsomeip/build
-RUN CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake -DENABLE_SIGNAL_HANDLING=1 -DENABLE_MULTIPLE_ROUTING_MANAGERS=1 ..
+RUN CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake -DENABLE_SIGNAL_HANDLING=1 -DENABLE_MULTIPLE_ROUTING_MANAGERS=0 ..
 RUN make
 RUN make install
 

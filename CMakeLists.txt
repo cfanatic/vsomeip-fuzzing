@@ -25,11 +25,13 @@ find_package(Boost 1.65.1 COMPONENTS system thread log REQUIRED)
 include_directories(
   ${VSOMEIP_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIR}
+  /src/vsomeip/implementation
 )
 
 add_executable(response response.cpp)
 add_executable(request request.cpp)
-add_executable(fuzzing fuzzing.cpp)
+add_executable(fuzzing fuzzing.cpp /src/vsomeip/implementation/plugin/src/plugin_manager_impl.cpp
+)
 target_link_libraries(response vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
 target_link_libraries(request vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
-target_link_libraries(fuzzing vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
+target_link_libraries(fuzzing vsomeip3 vsomeip3-sd vsomeip3-cfg dl ${Boost_LIBRARIES})
