@@ -30,4 +30,6 @@ RUN CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake .
 RUN cp ../conf/vsomeip_response.json vsomeip.json
 RUN make fuzzing
 
-# docker run -it --name vsomeip-testing vsomeip-testing
+# docker run -it -e "TERM=xterm-256color" --name vsomeip-testing vsomeip-testing
+# docker start vsomeip-testing
+# docker exec -it vsomeip-testing bash -l
