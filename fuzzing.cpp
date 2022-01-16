@@ -36,6 +36,7 @@ void service_on_message(const std::shared_ptr<vsomeip::message> &_request)
 
 void fuzzing_target_1(std::string &input)
 {
+    setenv("VSOMEIP_CONFIGURATION", input.c_str(), 1);
     afl_input = input;
     app_service = vsomeip::runtime::get()->create_application("!!SERVICE!!");
     app_service->init();
@@ -72,6 +73,9 @@ void fuzzing_target_2(const std::string &_config_file)
 
     // Do some fancy stuff
     its_configuration->set_configuration_path("/my/test/path");
+
+    // Print some fancy stuff
+    VSOMEIP_INFO << its_configuration->get_sd_ttl();
 }
 
 // ---- Main -------------------------------------------------------------------------------------------------
@@ -93,7 +97,7 @@ int main(int argc, char *argv[])
         buffer << file.rdbuf();
         file_input = buffer.str();
         file_input.erase(std::remove(file_input.begin(), file_input.end(), '\n'), file_input.end());
-        fuzzing_target_1(file_input);
+        fuzzing_target_1(file_path);
         fuzzing_target_2(file_path);
         file.close();
 #ifndef COMPILE_WITH_GCC
