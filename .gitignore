@@ -1,3 +1,5 @@
 /.vscode
 /build
+/cov
+.DS_Store
 misc/misc.txt
