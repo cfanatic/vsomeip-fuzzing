@@ -20,6 +20,8 @@ Developed and tested on the following setup:
 
 Don't forget to replace <*your-working-directory*> below.
 
+_Update on 18.01.2022: It is recommended to ignore the steps below, and build a Docker image based on the `Dockerfile` instead. Perform the instructions in `setup.sh` to get your setup running._
+
 ### 1. Prepare host
 
 ```bash
