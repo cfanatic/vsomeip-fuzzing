@@ -18,26 +18,12 @@
 #include <plugin/include/plugin_manager_impl.hpp>
 #include <security/include/security_impl.hpp>
 
-#define SERVICE_ID 0x1234
-#define METHOD_ID 0x0421
-#define INSTANCE_ID 0x5678
-
-std::shared_ptr<vsomeip::application> app_service;
-std::string afl_input;
-
-// ---- Service ----------------------------------------------------------------------------------------------
-
-void service_on_message(const std::shared_ptr<vsomeip::message> &_request)
-{
-    VSOMEIP_INFO << "--SERVICE-- Received message";
-}
-
-// ---- Target for Fuzzing -----------------------------------------------------------------------------------
+// ---- Targets for Fuzzing -----------------------------------------------------------------------------------
 
 void fuzzing_target_1(std::string &input)
 {
+    std::shared_ptr<vsomeip::application> app_service;
     setenv("VSOMEIP_CONFIGURATION", input.c_str(), 1);
-    afl_input = input;
     app_service = vsomeip::runtime::get()->create_application("!!SERVICE!!");
     app_service->init();
 }
