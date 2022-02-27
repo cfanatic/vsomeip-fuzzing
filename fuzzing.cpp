@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     std::stringstream buffer;
 
 #ifndef COMPILE_WITH_GCC
-    while (__AFL_LOOP(1000)) // macro unknown for gcc compilers
+    while (__AFL_LOOP(1000)) // Loop will run 1000 times and 1000 different inputs will be fed
     {
 #endif
         file_path = argv[1];
