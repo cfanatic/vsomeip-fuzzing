@@ -14,8 +14,6 @@ The central vsomeip routing manager gets messages only if they have to be sent t
 
 Commands
 --------
-export LD_LIBRARY_PATH=/home/cfanatic/Coding/C++/vsomeip/build
-
 route -n
 sudo route add -nv 224.224.224.245 dev eth0
 ping 224.224.224.245

@@ -2,7 +2,7 @@
 
 In the automotive industry, the SOME/IP protocol is used for Ethernet-based communication. It will gain in popularity in the future, since self-driving cars record large amounts of data which needs to be transmitted among sensors, actuators and control units in real-time. A robust protocol implementation is key for secure and safe vehicle operation.
 
-This repository hosts a fuzz testing suite based on [AFL++](https://github.com/AFLplusplus/AFLplusplus) for a [SOME/IP implementation](https://github.com/COVESA/vsomeip) developed by BMW AG. The setup instructions below explain how to build the code examples of the [COVESA/vsomeip in 10 minutes](https://github.com/COVESA/vsomeip/wiki/vsomeip-in-10-minutes#first) tutorial, which are used as the fuzzing targets.
+This repository hosts a fuzzing environment based on [AFL++](https://github.com/AFLplusplus/AFLplusplus) for a [SOME/IP implementation](https://github.com/COVESA/vsomeip) developed by BMW AG. The setup instructions below explain how to build the code examples of the [COVESA/vsomeip in 10 minutes](https://github.com/COVESA/vsomeip/wiki/vsomeip-in-10-minutes#first) tutorial, which are used as the fuzzing targets.
 
 According to Wikipedia:
 > Fuzzing is an automated software testing technique that involves providing invalid, unexpected, or random data as inputs to a computer program. The program is then monitored for exceptions such as crashes, failing built-in code assertions, or potential memory leaks.
@@ -67,6 +67,7 @@ cd build/
 CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ \
 cmake -DENABLE_SIGNAL_HANDLING=1 -DENABLE_MULTIPLE_ROUTING_MANAGERS=1 ..
 make
+make install
 ```
 
 ### 5. Build target
@@ -78,7 +79,6 @@ git clone https://github.com/cfanatic/vsomeip-fuzzing.git
 cd build
 CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake ..
 make fuzzing
-LD_LIBRARY_PATH=/root/vsomeip/build ./fuzzing
 ```
 
 In case you would like to build the fuzzing target with a compiler other than one that is shipped with AFL++, run the following call to `cmake`:
@@ -86,6 +86,20 @@ In case you would like to build the fuzzing target with a compiler other than on
 ```bash
 CC=gcc CXX=g++ cmake -D USE_GCC=ON ..
 make fuzzing
+```
+
+### 6. Run target
+
+Test if the setup is working by calling:
+
+```bash
+./fuzzing
+```
+
+In case of a dynamic library loading error, try instead:
+
+```bash
+LD_LIBRARY_PATH=/root/vsomeip/build ./fuzzing
 ```
 
 ## Fuzzing
