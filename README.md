@@ -20,7 +20,7 @@ Developed and tested on the following setup:
 
 Don't forget to replace <*your-working-directory*> below.
 
-_Update on 18.01.2022: It is recommended to ignore the steps below, and build a Docker image based on the `Dockerfile` instead. Perform the instructions in `setup.sh` to get your setup running._
+*Update on 18.01.2022: It is recommended to ignore the steps below, and build a Docker image based on the `Dockerfile` instead. Perform the instructions in `setup.sh` to get your setup running.*
 
 ### 1. Prepare host
 
@@ -54,6 +54,7 @@ apt install -y g++
 apt install -y asciidoc source-highlight doxygen graphviz
 apt install -y net-tools
 apt install -y iputils-ping
+apt install -y afl++
 aptitude search boost
 ```
 
@@ -75,7 +76,7 @@ cd /root/vsomeip/examples/tutorial
 git clone https://github.com/cfanatic/vsomeip-fuzzing.git
 cd build
 CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake ..
-make fuzzing request response
+make fuzzing
 LD_LIBRARY_PATH=/root/vsomeip/build ./fuzzing
 ```
 
@@ -88,9 +89,11 @@ make fuzzing
 
 ## Fuzzing
 
-Run a fuzz session by calling:
+Switch into the build folder, and perform a fuzz session on the target by calling:
 
 ```bash
+mkdir -p afl/input afl/finding
+echo "hello" > afl/input/seed
 afl-fuzz -m 500 -i afl/input/ -o afl/finding/ ./fuzzing @@
 ```
 
