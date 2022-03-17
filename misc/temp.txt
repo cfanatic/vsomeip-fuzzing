@@ -20,5 +20,3 @@ route -n
 sudo route add -nv 224.224.224.245 dev eth0
 ping 224.224.224.245
 sudo ifconfig eth0 multicast
-
-sudo MPLBACKEND=Agg python3 ./send.py

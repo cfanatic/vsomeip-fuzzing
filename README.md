@@ -2,7 +2,7 @@
 
 In the automotive industry, the SOME/IP protocol is used for Ethernet-based communication. It will gain in popularity in the future, since self-driving cars record large amounts of data which needs to be transmitted among sensors, actuators and control units in real-time. A robust protocol implementation is key for secure and safe vehicle operation.
 
-This repository hosts a fuzz testing suite based on [AFL++](https://github.com/AFLplusplus/AFLplusplus) for a [SOME/IP implementation](https://github.com/GENIVI/vsomeip) developed by BMW AG. The setup instructions below explain how to build the code examples of the [GENIVI/vsomeip in 10 minutes](https://github.com/GENIVI/vsomeip/wiki/vsomeip-in-10-minutes#first) tutorial, which are used as the fuzzing targets.
+This repository hosts a fuzz testing suite based on [AFL++](https://github.com/AFLplusplus/AFLplusplus) for a [SOME/IP implementation](https://github.com/COVESA/vsomeip) developed by BMW AG. The setup instructions below explain how to build the code examples of the [COVESA/vsomeip in 10 minutes](https://github.com/COVESA/vsomeip/wiki/vsomeip-in-10-minutes#first) tutorial, which are used as the fuzzing targets.
 
 According to Wikipedia:
 > Fuzzing is an automated software testing technique that involves providing invalid, unexpected, or random data as inputs to a computer program. The program is then monitored for exceptions such as crashes, failing built-in code assertions, or potential memory leaks.
@@ -26,7 +26,7 @@ Using the instructions below, you create a Docker container on your host compute
 
 ```bash
 cd <your-working-directory>
-git clone https://github.com/GENIVI/vsomeip.git
+git clone https://github.com/COVESA/vsomeip.git
 ```
 
 ### 2. Build container
@@ -64,7 +64,8 @@ aptitude search boost
 cd /root/vsomeip
 mkdir build
 cd build/
-CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake -DENABLE_SIGNAL_HANDLING=1 -DENABLE_MULTIPLE_ROUTING_MANAGERS=1 ..
+CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ \
+cmake -DENABLE_SIGNAL_HANDLING=1 -DENABLE_MULTIPLE_ROUTING_MANAGERS=1 ..
 make
 ```
 
@@ -89,7 +90,7 @@ make fuzzing
 
 ## Fuzzing
 
-Switch into the build folder, and perform a fuzz session on the target by calling:
+Perform a fuzz session on the target by calling:
 
 ```bash
 mkdir -p afl/input afl/finding
