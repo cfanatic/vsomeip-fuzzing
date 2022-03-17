@@ -63,20 +63,20 @@ aptitude search boost
 cd /root/vsomeip
 mkdir build
 cd build/
-cmake -DENABLE_SIGNAL_HANDLING=1 -DENABLE_MULTIPLE_ROUTING_MANAGERS=1 ..
+CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake -DENABLE_SIGNAL_HANDLING=1 -DENABLE_MULTIPLE_ROUTING_MANAGERS=1 ..
 make
 ```
 
-### 5. Build tutorial
+### 5. Build target
 
 ```bash
 mkdir -p /root/vsomeip/examples/tutorial/build
 cd /root/vsomeip/examples/tutorial
 git clone https://github.com/cfanatic/vsomeip-fuzzing.git
 cd build
-cmake ..
-make request response
-LD_LIBRARY_PATH=/root/vsomeip/build ./service
+CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake ..
+make fuzzing request response
+LD_LIBRARY_PATH=/root/vsomeip/build ./fuzzing
 ```
 
 In case you would like to build the fuzzing target with a compiler other than one that is shipped with AFL++, run the following call to `cmake`:
@@ -86,28 +86,15 @@ CC=gcc CXX=g++ cmake -D USE_GCC=ON ..
 make fuzzing
 ```
 
-### 6. Fuzz tutorial
+## Fuzzing
 
-Replace the call to `cmake` in section 4 with the following instruction below:
-
-```bash
-CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake -DENABLE_SIGNAL_HANDLING=1 -DENABLE_MULTIPLE_ROUTING_MANAGERS=1 ..
-```
-
-Replace the calls to `cmake` and `make` in section 5 with the following instruction below:
-
-```bash
-CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake ..
-make fuzzing
-```
-
-Run a fuzzing session by calling:
+Run a fuzz session by calling:
 
 ```bash
 afl-fuzz -m 500 -i afl/input/ -o afl/finding/ ./fuzzing @@
 ```
 
-### 7. Instrument library
+## Instrumentation
 
 You might want to make sure that AFL++ catches crashes in the vsomeip library prior to long fuzzing sessions. You can add following code to `vsomeip/implementation/logger/src/message.cpp` which causes a null pointer exception whenever the fuzzed payload in `buffer_` is equal to one of the items in vector `v`:
 
