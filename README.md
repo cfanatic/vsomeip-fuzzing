@@ -25,24 +25,22 @@ Using the instructions below, you create a Docker container on your host compute
 
 ### 1. Prepare host
 
-```bash
+```text
 cd <your-working-directory>
 git clone https://github.com/COVESA/vsomeip.git
 ```
 
 ### 2. Build container
 
-```bash
+```text
 docker pull ubuntu:18.04
 docker run -it -v <your-working-directory>/vsomeip:/root/vsomeip --name vsomeip ubuntu:18.04
 docker exec -it vsomeip bash
-docker start vsomeip
-docker stop vsomeip
 ```
 
 ### 3. Configure container
 
-```bash
+```text
 apt update
 apt install -y aptitude
 apt install -y nano
@@ -61,7 +59,7 @@ aptitude search boost
 
 ### 4. Build library
 
-```bash
+```text
 cd /root/vsomeip
 mkdir build
 cd build/
@@ -73,18 +71,19 @@ make install
 
 ### 5. Build target
 
-```bash
+```text
 mkdir -p /root/vsomeip/examples/tutorial/build
 cd /root/vsomeip/examples/tutorial
 git clone https://github.com/cfanatic/vsomeip-fuzzing.git
 cd build
 CC=/usr/local/bin/afl-clang-fast CXX=/usr/local/bin/afl-clang-fast++ cmake ..
+cp ../conf/vsomeip_response.json vsomeip.json
 make fuzzing
 ```
 
 In case you would like to build the fuzzing target with a compiler other than one that is shipped with AFL++, run the following call to `cmake`:
 
-```bash
+```text
 CC=gcc CXX=g++ cmake -D USE_GCC=ON ..
 make fuzzing
 ```
@@ -93,21 +92,21 @@ make fuzzing
 
 Test if the setup is working by calling:
 
-```bash
-./fuzzing
+```text
+./fuzzing vsomeip.json
 ```
 
 In case of a dynamic library loading error, try instead:
 
-```bash
-LD_LIBRARY_PATH=/root/vsomeip/build ./fuzzing
+```text
+LD_LIBRARY_PATH=/root/vsomeip/build ./fuzzing vsomeip.json
 ```
 
 ## Fuzzing
 
 Perform a fuzz session on the target by calling:
 
-```bash
+```text
 mkdir -p afl/input afl/finding
 echo "hello" > afl/input/seed
 afl-fuzz -m 500 -i afl/input/ -o afl/finding/ ./fuzzing @@
