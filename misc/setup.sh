@@ -14,4 +14,4 @@ afl-cov -d afl_output/ --coverage-cmd "./fuzzing AFL_FILE" --code-dir ../ --over
 docker run -t -d --name vsomeip-fuzz vsomeip-fuzzing bash
 docker exec -it vsomeip-fuzz ../misc/runtime.sh -fuzz 10
 docker exec -it vsomeip-fuzz ../misc/runtime.sh -report
-docker cp vsomeip-fuzz:/src/vsomeip-fuzzing/build/afl_output/cov .
+docker cp vsomeip-fuzz:/src/vsomeip-fuzzing/build/afl_output .
