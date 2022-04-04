@@ -24,9 +24,9 @@ RUN CC=/usr/local/bin/afl-gcc-fast CXX=/usr/local/bin/afl-g++-fast cmake -DENABL
 RUN make
 RUN make install
 
-COPY . /src/vsomeip-testing
-RUN mkdir -p /src/vsomeip-testing/build
-WORKDIR /src/vsomeip-testing/build
+COPY . /src/vsomeip-fuzzing
+RUN mkdir -p /src/vsomeip-fuzzing/build
+WORKDIR /src/vsomeip-fuzzing/build
 RUN CC=/usr/local/bin/afl-gcc-fast CXX=/usr/local/bin/afl-g++-fast cmake -DCOVERAGE=1 ..
 RUN cp ../conf/vsomeip_response.json vsomeip.json
 RUN make fuzzing
