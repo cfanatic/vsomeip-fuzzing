@@ -18,10 +18,9 @@ Developed and tested on the following setup:
 
 ## Setup
 
-***Update on 18.01.2022**: It is recommended to ignore the steps below, and build a Docker image based on the `Dockerfile` instead. Perform the instructions in `setup.sh` to get your setup running.*
+***Update on 18.01.2022**: It is recommended to ignore the steps below, and build a Docker image based on the `Dockerfile` instead. Perform the instructions in `misc/setup.sh` to get your setup running.*
 
 Using the instructions below, you create a Docker container on your host computer in which you perform the build process.
-
 
 ### 1. Prepare host
 

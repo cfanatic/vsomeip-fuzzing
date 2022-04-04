@@ -35,4 +35,4 @@ RUN make fuzzing
 RUN mkdir afl_input afl_output
 RUN cp vsomeip.json afl_input/
 
-CMD [ "afl-fuzz", "-m", "500", "-i", "afl_input/", "-o", "afl_output/", "./fuzzing", "@@" ]
+CMD [ "afl-fuzz", "-V", "3", "-m", "500", "-i", "afl_input/", "-o", "afl_output/", "./fuzzing", "@@" ]
