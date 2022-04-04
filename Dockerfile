@@ -1,4 +1,4 @@
-FROM aflplusplus/aflplusplus:latest AS afl
+FROM aflplusplus/aflplusplus:latest AS aflplusplus-base
 
 ENV LD_LIBRARY_PATH=/usr/local/lib/ 
 RUN apt-get update
@@ -16,6 +16,8 @@ RUN apt-get -y install \
     net-tools \
     iputils-ping
 
+FROM aflplusplus-base
+
 RUN git clone https://github.com/COVESA/vsomeip.git /src/vsomeip
 RUN sed -i "s/add_subdirectory( examples\/routingmanagerd )/# add_subdirectory( examples\/routingmanagerd )/g" /src/vsomeip/CMakeLists.txt
 RUN mkdir -p /src/vsomeip/build
@@ -32,3 +34,5 @@ RUN cp ../conf/vsomeip_response.json vsomeip.json
 RUN make fuzzing
 RUN mkdir afl_input afl_output
 RUN cp vsomeip.json afl_input/
+
+CMD [ "afl-fuzz", "-m", "500", "-i", "afl_input/", "-o", "afl_output/", "./fuzzing", "@@" ]

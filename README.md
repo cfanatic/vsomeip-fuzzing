@@ -107,9 +107,9 @@ LD_LIBRARY_PATH=/root/vsomeip/build ./fuzzing vsomeip.json
 Perform a fuzz session on the target by calling:
 
 ```text
-mkdir -p afl/input afl/finding
-echo "hello" > afl/input/seed
-afl-fuzz -m 500 -i afl/input/ -o afl/finding/ ./fuzzing @@
+mkdir -p afl_input afl_output
+echo "hello" > afl_input/seed
+afl-fuzz -m 500 -i afl_input/ -o afl_output/ ./fuzzing @@
 ```
 
 ## Instrumentation
