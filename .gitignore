@@ -1,5 +1,5 @@
 /.vscode
 /build
-/cov
+/afl_output
 .DS_Store
 misc/misc.txt

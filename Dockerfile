@@ -30,7 +30,7 @@ COPY . /src/vsomeip-fuzzing
 RUN mkdir -p /src/vsomeip-fuzzing/build
 WORKDIR /src/vsomeip-fuzzing/build
 RUN CC=/usr/local/bin/afl-gcc-fast CXX=/usr/local/bin/afl-g++-fast cmake -DCOVERAGE=1 ..
-RUN cp ../conf/vsomeip_response.json vsomeip.json
+RUN cp ../conf/vsomeip.json vsomeip.json
 RUN make fuzzing
 RUN mkdir afl_input afl_output
 RUN cp vsomeip.json afl_input/

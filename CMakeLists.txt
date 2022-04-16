@@ -28,8 +28,6 @@ include_directories(
   /src/vsomeip/implementation
 )
 
-add_executable(response response.cpp)
-add_executable(request request.cpp)
 add_executable(
   fuzzing
   fuzzing.cpp
@@ -37,6 +35,4 @@ add_executable(
   /src/vsomeip/implementation/plugin/src/plugin_manager_impl.cpp
 )
 
-target_link_libraries(response vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
-target_link_libraries(request vsomeip3 vsomeip3-sd ${Boost_LIBRARIES})
 target_link_libraries(fuzzing vsomeip3 vsomeip3-sd vsomeip3-cfg dl ${Boost_LIBRARIES})

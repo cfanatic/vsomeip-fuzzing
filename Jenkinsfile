@@ -1,19 +1,62 @@
------BEGIN PGP MESSAGE-----
+pipeline {
 
-jA0ECQMC4EiQrWg+3JD00ukBNeFtUkcrag5Y+jolcxNrjZrDPjCfZM3oN7PoYzYm
-W3pcT0OARZV0sLBAeEbX26Th9fh6cGsu5skfET9v1ArHdXXqi2BrX9+KwG7Zo3Of
-C3qJBFheRZhs7SQ+YaYI8HmHA/ru12yl/sn7tAL512WoHYr97lViFI3cCh/QTZXL
-bI59NrmxiN1OvCFIaPOi/a90X9oYf46uEyoFnOXTroXkWKKkr3eV88V3+NpiwWQf
-CxLmBJuXAlGRf6qI2mPxK+FVBNWL2crNrrQ4DmoJA83oCUP6BkhRUmRUe/ZwQuzw
-yox3Z78DQEtPDgd5uuFfMRaviUsTHYtkT84m5wP/rIcVMg7UJ5eBRpztFIC3NTTa
-IW7SOgqSaML2ZE3MEKlwkg2OF1+6CixKo3oKd66ZdyEdlCpLSfxutW5SGvB5zh6W
-i2F8ocjlVpvBaHMhZLB8CPBCnYwtOk8tOzevzi2yhHpkPnE8pB7yE4gGMyQssj1a
-iLawXjrRrYelNxLytZCzleCom5qlm0NB5lTRiiVA9A7flV0KFotAW8+uLXbkUtHA
-btnO3bjS021ISmtWNXXAYDfkhHeiZCYq4cJePjStZW6+3VoKHf8BG6AIMoCCCKQR
-wWArmb5o7bEYn2bMUOljoXw7Vyyok3gdZlOotmL69rCzO+HNyzh9ZhckuTzXZiT0
-IrCXf9ZUZ9JkHtqcaRgy5mEzd09Z6kHMzdRGv/p1z8l9I+ufMWXVUUHAk1B+1EsS
-furOqJ/ZTamcEutABL4QAmVAdEBLn6QLtIpoNhjfMfBbaqSVcDlhTt6QpanzVrXF
-2l8B2rnfc0ORDvvFlhrjcoq+l98y03A7vXmeaf+oCUNhy4LSf2k5pe9W0FQgfJHE
-/m+/ZJI4gPmye9JHhJH0/QbJjeJlevHHH8WJY9foN0eieA==
-=10O7
------END PGP MESSAGE-----
+    agent any
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timeout(time: 1, unit: 'HOURS')
+    }
+
+	parameters {
+		booleanParam name: 'RUN_BUILD', defaultValue: true, description: 'Run build process?'
+		booleanParam name: 'RUN_FUZZ', defaultValue: true, description: 'Run fuzz process?'
+		booleanParam name: 'RUN_REPORT', defaultValue: true, description: 'Run report process?'
+	}
+
+    stages {
+        stage('Build') {
+            when {
+                expression { params.RUN_BUILD == true }
+            }
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: 'feature-demo-afl']],
+                    extensions: [],
+                    userRemoteConfigs: [[url: 'https://github.com/cfanatic/vsomeip-fuzzing']],
+                ])
+                sh 'docker build -t vsomeip-fuzzing .'
+                sh 'docker run -t -d --name vsomeip-fuzz vsomeip-fuzzing bash'
+            }
+        }
+        stage('Fuzz') {
+            when {
+                expression { params.RUN_FUZZ == true }
+            }
+            steps {
+                sh 'docker exec vsomeip-fuzz ../misc/runtime.sh -fuzz 10'
+            }
+        }
+        stage('Report') {
+            when {
+                expression { params.RUN_REPORT == true }
+            }
+            steps {
+                sh 'docker exec vsomeip-fuzz ../misc/runtime.sh -report'
+            }
+        }
+    }
+
+    post {
+        success {
+            sh 'rm -rf afl_output'
+            sh 'docker cp vsomeip-fuzz:/src/vsomeip-fuzzing/build/afl_output .'
+            zip archive: true, dir: 'afl_output', exclude: '', glob: '', overwrite: true, zipFile: "report_${env.BUILD_ID}.zip"
+        }
+        cleanup {
+            sh 'docker stop vsomeip-fuzz'
+            sh 'docker rm vsomeip-fuzz'
+        }
+    }
+
+}
