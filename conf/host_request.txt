@@ -4,7 +4,7 @@ Client
 $ ifconfig eth0
 
 eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.0.4  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet 192.168.0.19  netmask 255.255.255.0  broadcast 192.168.0.255
         inet6 2003:e4:a718:1558:651d:47b9:a104:7d6e  prefixlen 64  scopeid 0x0<global>
         inet6 2003:e4:a718:1558:a00:27ff:fe51:19d0  prefixlen 64  scopeid 0x0<global>
         inet6 fe80::a00:27ff:fe51:19d0  prefixlen 64  scopeid 0x20<link>
